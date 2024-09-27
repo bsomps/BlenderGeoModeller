@@ -15,7 +15,10 @@ Link to BlenderGIS: [BlenderGIS](https://github.com/domlysz/BlenderGIS)
 
 ### **2. Install the Required Dependencies**
 
-- Dependencies must be installed in your Blender environment before installing the add-on, or an error message will appear during installation. **To view the console** (recommended) while running Blender Click **Window** → **Toggle System Console**.
+Dependencies must be installed in your Blender environment before installing the add-on, or an error message will appear during installation. **To view the console** (recommended) while running Blender Click **Window** → **Toggle System Console**.
+  
+- **Open Blender**:
+   - Make sure if you are running windows to open blender with *****Run as Administrator***** for the depenency install. Once the install is completed once, there is no need to continue to run blender as an administrator or run the dependency install again.
 
 - **Navigate to the Text Editor**:
    - Change the editor type by clicking the small hierarchy tree button (top-left corner) in the **Outliner**, and select **Text Editor**, OR
