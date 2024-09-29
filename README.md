@@ -102,3 +102,25 @@ Dependencies must be installed in your Blender environment before installing the
    - Returns the interplated surfaces only.
    - Complex models will have long processing times.
    - For an overview of GemPy visit [GemPy](https://www.gempy.org/)
+ 
+- **Structral Planes**:
+   - Create bounding box (create cube) to set extents.
+   - Choose collection holding objects (mesh or curve objects) that you would like to convert to planes. Select the azimuth and dip properties.
+   - Returns a plane in the set orientation, clipped to the bounding box.
+   - Origin of the plane is set to the origin of the object if mesh object (point data) but set to the lowest vertex if curve object (interval data)
+ 
+- **Structral Discs**:
+   - Choose collection holding objects (mesh or curve objects) that you would like to convert to discs. Select the azimuth and dip properties. select the size.
+   - Returns a disc in the set oreintation.
+   - Origin of the disc is set to the origin of the object if mesh object (point data) but set to the lowest vertex if curve object (interval data).
+ 
+### **Numerical Modelling**
+- **RBF Grade Shell Mesh**:
+   - Create bounding box (create cube) to set extents.
+   - Choose collection holding the data (can be curve or mesh object). Select the numerical property to model and choose an isosurface value and interpolation method.
+   - returns an isosurface (mesh object) around the generated scaler field.
+ 
+- **RBF Block Model**:
+   - Create bounding box (create cube) to set extents.
+   - Choose collection holding the data (can be curve or mesh object). Select the numerical property to model. choose an interpolation method.
+   - Returns 10 collections of voxels. These are ordered from increasing to decreasing interpolated value in order to progressivly turn on or off segments. 
