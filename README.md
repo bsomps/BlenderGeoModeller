@@ -53,6 +53,7 @@ Dependencies must be installed in your Blender environment before installing the
 - Click 'n' on your keyboard to bring up the tool sidebar. Here you will see 'GeoModeller' tab.
 
 ---
+![Alt text](https://github.com/bsomps/BlenderGeoModeller/blob/media/drillholevid.gif)
 
 
 # **Overview Of Operators**
