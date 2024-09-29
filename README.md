@@ -87,17 +87,18 @@ Dependencies must be installed in your Blender environment before installing the
 ### **Point Data**
 - **Import Point Data (xyz)**:
    - Click 'Load CSV' to bring up the file browser and upload the point data file. Fill in drop-downs as appropriate.
-   - Returns points as sphere objects
+   - Returns points as spheres (mesh objects).
 
 - **Manage Point Data**:
-   - Adjust colormapping and size
-   - Same additional fucntionality as drill hole curve objects
+   - Adjust colormapping and size.
+   - Same additional fucntionality as drill hole curve objects.
 
 - **Point Data Query**:
-   - Same functionality as drill hole data query
+   - Same functionality as drill hole data query.
   
 ### **Geological Modelling**
 - **GemPy Modeller**:
-   - Emulates the workflow of the gemPy module. (set extents, feed formation and orientation data, create structral frame)
-   - Returns the interplated surfaces only
-   - Complex models will have long processing times
+   - Emulates the workflow of the gemPy module. (set extents, feed formation and orientation data, create structral frame).
+   - Returns the interplated surfaces only.
+   - Complex models will have long processing times.
+   - For an overview of GemPy visit [GemPy](https://www.gempy.org/)
