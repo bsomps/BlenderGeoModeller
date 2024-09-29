@@ -64,7 +64,7 @@ Dependencies must be installed in your Blender environment before installing the
    - Returns the uploaded datasheet with added x, y, z (easting, northing, elevation (m)) values for each row. Adds a new row for each collar coordinate. Save to your files.
    
 - **Import Drill Holes (xyz)**:
-   - Click 'Upload Drill Holes' to bring up the file browser and upload the desurveyed file. Fill in drop-downs as appropriate.
+   - Click 'Load CSV' to bring up the file browser and upload the desurveyed file. Fill in drop-downs as appropriate.
    - Returns 3 collections: Drill hole data (curve objects), drill hole traces (curve objects), and hole IDs (mesh objects).
    - Each curve object in the drill hole corresponds to a row in the CSV file, with the column values imported as custom properties for each object.
    
@@ -84,5 +84,20 @@ Dependencies must be installed in your Blender environment before installing the
    - Returns curve objects representing the planned drill holes in their correct spatial location and orientation.
    - Option to take manually created curve objects in your scene (make sure to create curves as 'Path') and then create a CSV output from these objects (ensure they are all in the same collection).
 
+### **Point Data**
+- **Import Point Data (xyz)**:
+   - Click 'Load CSV' to bring up the file browser and upload the point data file. Fill in drop-downs as appropriate.
+   - Returns points as sphere objects
 
+- **Manage Point Data**:
+   - Adjust colormapping and size
+   - Same additional fucntionality as drill hole curve objects
+
+- **Point Data Query**:
+   - Same functionality as drill hole data query
   
+### **Geological Modelling**
+- **GemPy Modeller**:
+   - Emulates the workflow of the gemPy module. (set extents, feed formation and orientation data, create structral frame)
+   - Returns the interplated surfaces only
+   - Complex models will have long processing times
