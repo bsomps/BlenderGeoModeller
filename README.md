@@ -129,4 +129,4 @@ Dependencies must be installed in your Blender environment before installing the
 This tool applies a boolean modifier to every mesh objects (does not work for drill holes/curve objects) using the 'intersection' method. The 'Apply Default Slicer' option will create an east-west oriented slice of 50 m width. This can be scaled/rotated/moved and the clip will automatically update. The 'Use Custom Object' allows the user to create an object to use as the slicer. 
 
 ### **View Direction**
-This allows the user to see which direction the viewport is oriented (recored in azimuth and plunge). Additionally, there is an option to assign a specific view direction and update the viewport to match
+This allows the user to see which direction the viewport is oriented (recored in azimuth and plunge). The direction readings will not update automatically upon movement, you will need to hover over the 'set manually' box or click on/off an object. Additionally, there is an option to assign a specific view direction and update the viewport to match
