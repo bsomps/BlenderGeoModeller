@@ -23,7 +23,7 @@ def get_csv_column_names(self, context):
     return [(col, col, "") for col in csv_columns]
 
 class DrillHoleRenderPanel(bpy.types.Panel): # UI Panel
-    bl_label = "Import Drill Holes (xyz)"
+    bl_label = "Import Drill Holes (.csv)"
     bl_idname = "IMPORT_PT_panel_DDH"
     bl_space_type = 'VIEW_3D'
     bl_region_type = 'UI'
