@@ -63,7 +63,7 @@ Dependencies must be installed in your Blender environment before installing the
    - Upload survey, collar, and datasheet as **CSV files**. Fill in the drop-downs as appropriate.
    - Returns the uploaded datasheet with added x, y, z (easting, northing, elevation (m)) values for each row. Adds a new row for each collar coordinate. Save to your files.
    
-- **Import Drill Holes (xyz)**:
+- **Import Drill Holes (.csv)**:
    - Click 'Load CSV' to bring up the file browser and upload the desurveyed file. Fill in drop-downs as appropriate.
    - Returns 3 collections: Drill hole data (curve objects), drill hole traces (curve objects), and hole IDs (mesh objects).
    - Each curve object in the drill hole corresponds to a row in the CSV file, with the column values imported as custom properties for each object.
@@ -85,7 +85,7 @@ Dependencies must be installed in your Blender environment before installing the
    - Option to take manually created curve objects in your scene (make sure to create curves as 'Path') and then create a CSV output from these objects (ensure they are all in the same collection).
 
 ### **Point Data**
-- **Import Point Data (xyz)**:
+- **Import Point Data (.csv)**:
    - Click 'Load CSV' to bring up the file browser and upload the point data file. Fill in drop-downs as appropriate.
    - Returns points as spheres (mesh objects).
 
@@ -99,7 +99,7 @@ Dependencies must be installed in your Blender environment before installing the
 ### **Geological Modelling**
 - **GemPy Modeller**:
    - Emulates the workflow of the gemPy module. (set extents, feed formation and orientation data, create structral frame).
-   - Returns the interplated surfaces only.
+   - Returns the interpolated surfaces only.
    - Complex models will have long processing times.
    - For an overview of GemPy visit [GemPy](https://www.gempy.org/)
  
@@ -126,7 +126,7 @@ Dependencies must be installed in your Blender environment before installing the
    - Returns 10 collections of voxels. These are ordered from increasing to decreasing interpolated value in order to progressivly turn on or off segments. 
 
 ### **Section Slicer**
-This tool applies a boolean modifier to every mesh objects (does not work for drill holes/curve objects) using the 'intersection' method. The 'Apply Default Slicer' option will create an east-west oriented slice of 50 m width. This can be scaled/rotated/moved and the clip will automatically update. The 'Use Custom Object' allows the user to create an object to use as the slicer. 
+This tool applies a boolean modifier to every mesh object visible in the scene (does not work for drill holes/curve objects) using the 'intersection' method. The 'Apply Default Slicer' option will create an east-west oriented slice of 50 m width. This can be scaled/rotated/moved and the clip will automatically update. The 'Use Custom Object' allows the user to create an object to use as the slicer. 
 
 ### **View Direction**
 This allows the user to see which direction the viewport is oriented (recored in azimuth and plunge). The direction readings will not update automatically upon movement, you will need to hover over the 'set manually' box or click on/off an object. Additionally, there is an option to assign a specific view direction and update the viewport to match
