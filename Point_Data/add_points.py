@@ -21,7 +21,7 @@ def get_csv_column_names_points(self, context):
     return [(col, col, "") for col in csv_columns_points]
 
 class PointsRenderPanel(bpy.types.Panel): # UI Panel
-    bl_label = "Import Point Data (xyz)"
+    bl_label = "Import Point Data (.csv)"
     bl_idname = "IMPORT_PT_panel_points"
     bl_space_type = 'VIEW_3D'
     bl_region_type = 'UI'
