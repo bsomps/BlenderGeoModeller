@@ -1,6 +1,9 @@
 import bpy
+import bmesh
 import matplotlib.pyplot as plt
 import numpy as np
+from collections import defaultdict
+
 
 
 def get_unique_properties(collection): # find properties for drill hole curve objects
@@ -77,8 +80,65 @@ class OBJECT_OT_apply_color_changes(bpy.types.Operator): # main operator, mislea
             self.report({'ERROR'}, "Collection not found")
             return {'CANCELLED'}
 
+        # Cache all curve objects that have the selected property
+        all_objects = [
+            obj for obj in collection.all_objects 
+            if obj.type == 'CURVE' and props.selected_property in obj
+        ]
+
         property_type, property_data = self.get_property_type_and_data(collection, props.selected_property)
         log_scale_property_type, log_scale_property_data = self.get_property_type_and_data(collection, props.log_scale_property)
+
+        if props.contacts_to_point and property_type == 'CATEGORICAL':
+            from collections import defaultdict
+
+            # Create collection name based on the selected property
+            contacts_collection_name = f"Conatacts_{props.selected_property}"
+
+            # Ensure the '[selected_property]_contacts' collection exists, create if not
+            contacts_collection = bpy.data.collections.get(contacts_collection_name)
+            if not contacts_collection:
+                contacts_collection = bpy.data.collections.new(contacts_collection_name)
+                bpy.context.scene.collection.children.link(contacts_collection)
+
+            # Build a map of upper vertex positions to objects
+            upper_vertex_map = defaultdict(list)
+
+            for obj in all_objects:
+                curve = obj.data
+                if curve.splines and len(curve.splines[0].points) == 2:
+                    spline = curve.splines[0]
+                    points = spline.points
+                    upper_vertex = points[0] if points[0].co.z > points[1].co.z else points[1]
+                    position = tuple(round(coord, 6) for coord in upper_vertex.co.xyz)
+                    upper_vertex_map[position].append(obj)
+
+            # iterate over all objects to find contacts
+            for obj in all_objects:
+                obj_property_value = obj.get(props.selected_property, None)
+                curve = obj.data
+
+                if curve.splines and len(curve.splines[0].points) == 2:
+                    spline = curve.splines[0]
+                    points = spline.points
+
+                    lower_vertex = points[0] if points[0].co.z < points[1].co.z else points[1]
+                    position = tuple(round(coord, 6) for coord in lower_vertex.co.xyz)
+                    contact = False
+
+                    # Retrieve objects with upper vertices at the same position
+                    potential_contacts = upper_vertex_map.get(position, [])
+                    for other_obj in potential_contacts:
+                        if other_obj != obj:
+                            other_obj_property_value = other_obj.get(props.selected_property, None)
+                            if obj_property_value and other_obj_property_value and obj_property_value != other_obj_property_value:
+                                contact = True
+                                break
+
+                    # Create disc if contact detected
+                    if contact:
+                        self.create_disc_at_vertex(lower_vertex.co, obj_property_value, contacts_collection, obj)
+        
 
         color_map = {}
         normalization = None
@@ -130,7 +190,60 @@ class OBJECT_OT_apply_color_changes(bpy.types.Operator): # main operator, mislea
 
         return {'FINISHED'}
 
+    def create_disc_at_vertex(self, location, obj_property_value, contacts_collection, source_obj):
+        
+        disc_mesh = self.create_disc_mesh(20, f"{obj_property_value}_contact")
+        disc_obj = bpy.data.objects.new(f"{obj_property_value}_contact", disc_mesh)
+        contacts_collection.objects.link(disc_obj)
+        
+        # Set the location of the disc
+        disc_obj.location = (location.x, location.y, location.z)
 
+        # Add the custom property 'name' to the disc
+        disc_obj['name'] = obj_property_value
+
+        # Copy custom properties from the source object
+        self.copy_custom_properties(disc_obj, source_obj)
+
+        return disc_obj
+
+    def create_disc_mesh(self, radius, name):
+        # Create a flat disc as point object
+        mesh = bpy.data.meshes.new(name)
+        bm = bmesh.new()
+        bmesh.ops.create_circle(bm, cap_ends=True, radius=radius, segments=32)
+        bm.to_mesh(mesh)
+        bm.free()
+        return mesh
+
+    def copy_custom_properties(self, disc_obj, source_obj):
+        # List of properties to copy
+        properties_to_copy = ['azimuth', 'dip', 'polarity']
+        
+        if "_RNA_UI" not in disc_obj:
+            disc_obj["_RNA_UI"] = {}
+
+        for prop in properties_to_copy:
+            
+            if prop in source_obj:
+                disc_obj[prop] = source_obj[prop]
+            else:
+                # Set default values ONLY if the property doesn't exist already
+                if prop == 'azimuth':
+                    disc_obj[prop] = 0
+                elif prop == 'dip':
+                    disc_obj[prop] = 0
+                elif prop == 'polarity':
+                    disc_obj[prop] = 1  
+
+            # Add RNA UI definitions 
+            if prop not in disc_obj["_RNA_UI"]:
+                if prop == 'azimuth':
+                    disc_obj["_RNA_UI"][prop] = {"max": 360, "description": "Azimuth (0-360)", "override_library_create": True}
+                elif prop == 'dip':
+                    disc_obj["_RNA_UI"][prop] = {"max": 90, "description": "Dip (0-90)", "override_library_create": True}
+                elif prop == 'polarity':
+                    disc_obj["_RNA_UI"][prop] = {"max": 1, "description": "Polarity (0-1)", "override_library_create": True}
 
     def apply_default_settings(self, obj): # default to trace for 'no data' cells
         obj.data.bevel_depth = 0
@@ -269,9 +382,12 @@ class OBJECT_PT_custom_panel(bpy.types.Panel): # UI panel
             if mytool.selected_property:
                 layout.prop(mytool, "color_ramp_options", text="Color Ramp")
                 layout.prop(mytool, "size", text="Size")
-                layout.prop(mytool, "adjust_for_outliers", text="Colormap Normalization")
-                if mytool.adjust_for_outliers:
-                    layout.prop(mytool, "scaling_factor", text="IQR Scaling Factor")
+                if mytool.selected_property_type == 'CATEGORICAL':
+                    layout.prop(mytool, "contacts_to_point", text="Contacts to Points")
+                if mytool.selected_property_type == 'NUMERICAL':
+                    layout.prop(mytool, "adjust_for_outliers", text="Colormap Normalization")
+                    if mytool.adjust_for_outliers:
+                        layout.prop(mytool, "scaling_factor", text="IQR Scaling Factor")
                 layout.prop(mytool, "log_scale", text="Log Scale Sizing")
                 if mytool.log_scale:
                     layout.prop(mytool, "log_scale_property", text="Log Scale Attribute")
@@ -339,6 +455,11 @@ class MyProperties(bpy.types.PropertyGroup):
     legend: bpy.props.BoolProperty(
         name="Legend",
         description="Display legend in the scene",
+        default=False
+    )
+    contacts_to_point: bpy.props.BoolProperty(
+        name="Contacts to Point",
+        description="Create spheres at contacts between different curves",
         default=False
     )
 
