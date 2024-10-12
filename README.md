@@ -130,3 +130,13 @@ This tool applies a boolean modifier to every mesh object visible in the scene (
 
 ### **View Direction**
 This allows the user to see which direction the viewport is oriented (recored in azimuth and plunge). The direction readings will not update automatically upon movement, you will need to hover over the 'set manually' box or click on/off an object. Additionally, there is an option to assign a specific view direction and update the viewport to match
+
+# **Tips, Tricks and Limitations**
+- Understand Blenders **Viewport Shading** options. To view the colors you will need to be in **Materials Preview Mode** (or render preview mode). Solids mode will not display the material you've assigned to objects. 
+- Matplotlib color maps are best represented using the 'Raw' color output. To switch to 'Raw', navigate to the **Render Properties** and under **Color Managment** change the View Transform to **Raw**
+- Ensure that your data (CSV files) uses **projected coordinate systems** (UTM meters, feet) rather than geographic coordinate systems (lat/long)
+- Managment of **numerical** vs **categorical** data in you CSV file is key. If you have a numerical column, ensure that no non-numerical values are present (ie "<" symbols ect). If you have a categorial column, ensure that no numerical value are present (ie zero to represent none). For any 'null' data, leave the cell blank, do not enter "null" or N/A ect.. 
+- When Desurveying data, uploading a Survey CSV file is optional, if you do not have survey data, you can simply use the collar sheet and fill in azimuth, dip, and use final depth as the depth of measurment. Additionally, the 'Start Depth' in the collar sheet is an option for wedged holes, if all holes start at depth = zero, then simply change the drop down to "None" for start depth.
+- If you do not wish to use the Blender coordinate system (sets up coordinate space centered on the blender origin) then you can navigate to the add on **Preferences** and uncheck the box **Use Scene CRS**, this will use the raw x and y values. Though this is not recommended becuase issues will arise from operating so far from Blender's scene origin.
+- Be aware that **Cltr Z** (undo) will not work for some of the add-ons operators. I've noticed it will crash blender on some occosions
+- Blender is not designed to handle thousands of objects in your scene efficiently. Importing datasets that have over 10,000 rows will results in some slow processing times, the add-on works best for small drill programs (15 or so drill holes). Blender will progressivly slow down due to caching operations for undo operations, if blender starts to run too slowly, try saving your work, closing and re-opening the program. 
