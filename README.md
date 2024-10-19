@@ -47,7 +47,7 @@ Dependencies must be installed in your Blender environment before installing the
 - Go to **Edit** → **Preferences**.
 - In the Preferences window, navigate to the **Add-ons** tab.
 - Click on **Install...** at the top of the window.
-- In the file browser that appears, locate the `.zip` file you downloaded in step 1 and select it.
+- In the file browser that appears, locate the `.zip` file you downloaded in Step 1 and select it.
 - After installation, enable the add-on by checking the box next to **GeoModeller** in the list of installed add-ons.
    - *(If you are using Blender 4.2 or later, the add-on will automatically install without requiring you to check the box. Note; there is sometimes a delay between checking the box and completion of the add-on install)*
 - Click 'n' on your keyboard to bring up the tool sidebar. Here you will see 'GeoModeller' tab.
