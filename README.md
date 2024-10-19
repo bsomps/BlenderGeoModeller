@@ -28,7 +28,7 @@ Dependencies must be installed in your Blender environment before installing the
 - **Set up the Text Editor**:
    - Click **New** to add a new text block.
    - Either:
-     - Copy and paste the contents of the `dependency_imports.py` script into the text editor, OR
+     - Copy and paste the contents of the [dependency_imports.py]https://github.com/bsomps/BlenderGeoModeller/blob/main/Dependency_imports/dependency_imports.py script into the text editor, OR
      - Add the `dependency_imports.py` file by clicking **Add** (located in the Text Editor).
 
 - **Run the Script**:
