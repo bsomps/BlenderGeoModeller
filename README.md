@@ -3,7 +3,7 @@
 Please ensure you have BlenderGIS installed (awesome free add-on), as you will need this to set up a georeferenced scene in blender. Addtionally, you'll want it for other features including; 
 - Import DEMs to create topography surface.
 - Drape georeferenced images on topography.
-- Import shapefiles, export as shapefiles.
+- Import shapefiles, export as shapfile.
 
 Link to BlenderGIS download: [BlenderGIS](https://github.com/domlysz/BlenderGIS)
 
