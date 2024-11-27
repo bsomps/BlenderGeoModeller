@@ -33,6 +33,18 @@ Dependencies must be installed in your Blender environment before installing the
 
 - **Run the Script**:
    - Click **Text** → **Run Script** to execute the dependency installer.
+   - This will install the following packages into your Blender Python environment:
+     - **numpy**: `1.26.0`
+     - **scipy**: `1.13.0`
+     - **matplotlib**: `3.8.4`
+     - **gempy**: `2024.1.4`
+     - **torch**: `2.2.2`
+     - **torchvision**: `0.17.2`
+     - **torchaudio**: `2.2.2`
+     - **pandas**: `2.2.2`
+     - **scikit-image**: `0.23.2`
+
+
 
 - **Monitor the Installation Progress**:
    - Track the installation progress in the **Console** window.
