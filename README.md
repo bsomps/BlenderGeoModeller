@@ -7,7 +7,7 @@ Please ensure you have BlenderGIS installed (awesome free add-on), as you will n
 
 Link to BlenderGIS download: [BlenderGIS](https://github.com/domlysz/BlenderGIS)
 
-# **Installation Instructions**
+# **BlenderGeoModeller Installation Instructions**
 
 ### **1. Download the .zip File**
 - Download the `.zip` file from the **main branch** of the repository.
