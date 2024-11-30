@@ -1,4 +1,6 @@
 import bpy
+import tempfile
+import os
 import bmesh
 import matplotlib.pyplot as plt
 import numpy as np
@@ -332,10 +334,14 @@ class OBJECT_OT_apply_color_changes(bpy.types.Operator): # main operator, mislea
                 label="{:s}".format(unique_values[i]) )[0]  for i in range(len(unique_values))]
             ax.legend(handles=patches)
 
-        ax.set_title(property_name)  # Set the title of the legend
+        ax.set_title(property_name)  # Sets the title of the legend to the propname
         ax.axis('off')
         plt.tight_layout()
-        self.legend_path = "/tmp/legend.png"
+        
+        # Create a temporary file to store the legend
+        temp_dir = tempfile.gettempdir()  
+        self.legend_path = os.path.join(temp_dir, "legend.png")  
+    
         plt.savefig(self.legend_path, bbox_inches='tight', pad_inches=0.35, dpi=210)  
         plt.close(fig)
 
