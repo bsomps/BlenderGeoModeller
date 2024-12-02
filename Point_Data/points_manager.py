@@ -1,6 +1,13 @@
 import bpy
 import matplotlib.pyplot as plt
+from matplotlib.colors import LinearSegmentedColormap
+import tempfile
+import os
 import numpy as np
+
+magenta_colors = ["blue", "lightgreen", "yellow", "orange", "red", "magenta"]
+magenta_continuous_cmap = LinearSegmentedColormap.from_list("magenta_continuous_ramp", magenta_colors)
+plt.register_cmap(name="magenta_continuous_ramp", cmap=magenta_continuous_cmap)
 
 def get_unique_properties(collection):
     unique_props = set()
@@ -28,7 +35,7 @@ color_ramp_items = []
 def get_color_ramp_items(self, context):
     return color_ramp_items
 
-def update_property_type_and_color_ramp(props, context):
+def update_property_type_and_color_ramp(props, context): # dynamic color ramp options
     collection = bpy.data.collections.get(props.collection_name)
     if collection and props.selected_property:
         values = [obj[props.selected_property] for obj in collection.all_objects if props.selected_property in obj and obj[props.selected_property] not in [None, '', 'N/A']]
@@ -40,7 +47,7 @@ def update_property_type_and_color_ramp(props, context):
             except ValueError:
                 converted_values.append(value)
 
-        if all(isinstance(value, (float, int)) for value in converted_values):  # drop-down list for numerical color ramps
+        if all(isinstance(value, (float, int)) for value in converted_values):  # drop-down list for numerical color ramps ##### can add any matplotlib color-ramp 
             props.selected_property_type = 'NUMERICAL'
             color_ramp_items = [
                 ('viridis', 'viridis', ''),
@@ -52,10 +59,11 @@ def update_property_type_and_color_ramp(props, context):
                 ('inferno', 'inferno', ''),
                 ('magma', 'magma', ''),
                 ('coolwarm', 'coolwarm', ''),
-                ('bwr', 'bwr', '')
+                ('bwr', 'bwr', ''),
+                ('magenta_continuous_ramp', 'Spectral_Magenta', '')  # this one is custom
             ]
             print(f"Property '{props.selected_property}' is classified as NUMERICAL")
-        else:
+        else: # drop down list for categorical color ramps
             props.selected_property_type = 'CATEGORICAL'
             color_ramp_items = [('tab10', 'Tab10', ''), ('tab20', 'Tab20', '')]
             print(f"Property '{props.selected_property}' is classified as CATEGORICAL")
@@ -250,7 +258,11 @@ class OBJECT_OT_apply_color_changes_mesh(bpy.types.Operator):
         ax.set_title(property_name)  # Set the title of the legend
         ax.axis('off')
         plt.tight_layout()
-        self.legend_path = "/tmp/legend.png"
+        
+        # Create a temporary file to store the legend
+        temp_dir = tempfile.gettempdir()  
+        self.legend_path = os.path.join(temp_dir, "legend.png")  
+        
         plt.savefig(self.legend_path, bbox_inches='tight', pad_inches=0.35, dpi=210)  # Increase resolution with dpi=300
         plt.close(fig)
 
