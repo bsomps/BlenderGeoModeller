@@ -3,10 +3,13 @@ import tempfile
 import os
 import bmesh
 import matplotlib.pyplot as plt
+from matplotlib.colors import LinearSegmentedColormap
 import numpy as np
 from collections import defaultdict
 
-
+magenta_colors = ["lightblue", "lightgreen", "yellow", "orange", "red", "magenta"]
+magenta_continuous_cmap = LinearSegmentedColormap.from_list("magenta_continuous_ramp", magenta_colors)
+plt.register_cmap(name="magenta_continuous_ramp", cmap=magenta_continuous_cmap)
 
 def get_unique_properties(collection): # find properties for drill hole curve objects
     unique_props = set()
@@ -59,7 +62,8 @@ def update_property_type_and_color_ramp(props, context): # dynamic color ramp op
                 ('inferno', 'inferno', ''),
                 ('magma', 'magma', ''),
                 ('coolwarm', 'coolwarm', ''),
-                ('bwr', 'bwr', '')
+                ('bwr', 'bwr', ''),
+                ('magenta_continuous_ramp', 'Spectral_Magenta', '')  # this one is custom
             ]
             print(f"Property '{props.selected_property}' is classified as NUMERICAL")
         else: # drop down list for categorical color ramps
