@@ -7,7 +7,7 @@ from matplotlib.colors import LinearSegmentedColormap
 import numpy as np
 from collections import defaultdict
 
-magenta_colors = ["lightblue", "lightgreen", "yellow", "orange", "red", "magenta"]
+magenta_colors = ["blue", "lightgreen", "yellow", "orange", "red", "magenta"]
 magenta_continuous_cmap = LinearSegmentedColormap.from_list("magenta_continuous_ramp", magenta_colors)
 plt.register_cmap(name="magenta_continuous_ramp", cmap=magenta_continuous_cmap)
 
