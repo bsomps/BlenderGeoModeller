@@ -5,10 +5,6 @@ import tempfile
 import os
 import numpy as np
 
-magenta_colors = ["blue", "lightgreen", "yellow", "orange", "red", "magenta"]
-magenta_continuous_cmap = LinearSegmentedColormap.from_list("magenta_continuous_ramp", magenta_colors)
-plt.register_cmap(name="magenta_continuous_ramp", cmap=magenta_continuous_cmap)
-
 def get_unique_properties(collection):
     unique_props = set()
     for obj in collection.all_objects:
