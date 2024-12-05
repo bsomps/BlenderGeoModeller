@@ -157,9 +157,9 @@ This allows the user to see which direction the viewport is oriented (recored in
 - Be aware that **Ctrl Z** (undo) will not work for some of the add-on's operators. I've noticed it may crash Blender on some occasions.
 - Blender is not designed to handle thousands of objects in your scene efficiently. Importing datasets with over 10,000 rows will result in slow processing times; the add-on works best for small drill programs (around 15 drill holes). Blender will progressively slow down due to caching operations for undo functionality. If Blender starts to run too slowly, try saving your work, closing, and re-opening the program.
 
-### Recommended System Requirements:
+### Recommended System Requirements: (For optimal performance)
 
-- **Operating System:** Windows 10, macOS 10.14, or Linux (64-bit)
+- **Operating System:** Windows 10/11, macOS 10.14, or Linux (64-bit)
 - **CPU:** 64-bit eight-core processor (Intel Core i7 / AMD Ryzen 7 or higher)
 - **RAM:** 32 GB or more
 - **Graphics Card:**
