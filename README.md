@@ -1,6 +1,6 @@
 ## ****
 
-**BlenderGeoModeller** is a practical add-on for integrating geological data into Blender-- an open-source 3D modelling software. It provides tools for users to work with drill hole interval data, point data, and structural features directly within a spatially accurate 3D environment. By combining the remarkably comprehensive 3D capabilities of Blender with geological workflows, the add-on supports efficient creation and analysis of geospatial and geologic data in a customizable and flexible platform.
+**BlenderGeoModeller** is a practical add-on designed for integrating geological data into Blender -- an open-source 3D modeling software. It equips users with tools to work with drill hole interval data, point data, and structural features within a spatially accurate 3D environment. By leveraging Blender’s remarkably versatile 3D capabilities, the add-on aims to streamline geological workflows, enabling the efficient creation and analysis of geospatial and geologic data on a customizable and adaptable platform
 
 **Works with Blender V3.8 and up**
 
