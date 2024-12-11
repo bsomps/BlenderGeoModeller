@@ -114,7 +114,7 @@ Dependencies must be installed in your Blender environment before installing the
   
 ### **Geological Modelling**
 - **GemPy Modeller**:
-   - Emulates the workflow of the gemPy module. (set extents, feed formation and orientation data, create structral frame).
+   - Emulates the workflow of the gemPy module (v3). (set extents, feed formation and orientation data, create structral frame).
    - Returns the interpolated surfaces only.
    - Complex models will have long processing times.
    - For an overview of GemPy visit [GemPy](https://www.gempy.org/)
