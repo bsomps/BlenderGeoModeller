@@ -1,9 +1,3 @@
-## ****
-
-**BlenderGeoModeller** is a practical add-on designed for integrating geological data into Blender -- a free and open-source 3D software. It gives you tools to work with drill hole data, point data, and structural features in a spatially accurate 3D environment. By tapping into Blender’s powerful 3D capabilities, the add-on helps simplify geological workflows, making it easier to create and analyze geospatial and geologic data. Best of all, it’s completely free and open source, so anyone can contribute, share feedback, and help make it even better.
-
-**Works with Blender V3.8 and up**
-
 # **Reliance on BlenderGIS**
 
 Please ensure you have BlenderGIS installed (awesome free add-on), as you will need this to set up a georeferenced scene in blender. Addtionally, you'll want it for other features including; 
@@ -14,6 +8,8 @@ Please ensure you have BlenderGIS installed (awesome free add-on), as you will n
 Link to BlenderGIS download: [BlenderGIS](https://github.com/domlysz/BlenderGIS)
 
 # **BlenderGeoModeller Installation Instructions**
+
+**Works with Blender V3.8 and up**
 
 ### **1. Download the .zip File**
 - Download the `.zip` file from the **main branch** of the repository.
