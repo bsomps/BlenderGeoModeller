@@ -18,7 +18,7 @@ class SlicerSettings(bpy.types.PropertyGroup):
             ('FAST', "Fast", "Fast boolean operation"),
             ('EXACT', "Exact", "Exact boolean operation"),
         ],
-        default='FAST',
+        default='EXACT',
         update=lambda self, context: update_boolean_type(self.boolean_type)
     )
     slicing_object: bpy.props.PointerProperty(
@@ -80,6 +80,10 @@ def update_boolean_modifiers(slicing_object):
         boolean_modifier.object = slicing_object
         boolean_modifier.operation = 'INTERSECT'
         boolean_modifier.solver = boolean_type
+
+        if boolean_type == 'EXACT':
+            boolean_modifier.self_intersect = True
+            boolean_modifier.hole_tolerant = True
 
         
 
