@@ -82,8 +82,8 @@ def update_boolean_modifiers(slicing_object):
         boolean_modifier.solver = boolean_type
 
         if boolean_type == 'EXACT':
-            boolean_modifier.self_intersect = True
-            boolean_modifier.hole_tolerant = True
+            boolean_modifier.use_self = True
+            boolean_modifier.use_hole_tolerant = True
 
         
 
