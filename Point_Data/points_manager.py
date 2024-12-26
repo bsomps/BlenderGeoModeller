@@ -24,6 +24,9 @@ def update_properties_list(self, context):
             item = props.available_properties.add()
             item.name = prop
         update_property_type_and_color_ramp(props, context)
+        # Dynamically update size based on viewport clip_end
+        clip_end = get_viewport_clip_end()
+        props.size = clip_end * 0.0012
 
 color_ramp_items = []
 
@@ -67,13 +70,13 @@ def update_property_type_and_color_ramp(props, context): # dynamic color ramp op
     if context.area:
         context.area.tag_redraw()
 
-def get_first_object_size_x(collection_name):
-    collection = bpy.data.collections.get(collection_name)
-    if collection:
-        for obj in collection.all_objects:
-            if obj.type == 'MESH' and hasattr(obj, 'texture_space'):
-                return obj.texture_space.size[0]  # Access Size X
-    return 1.0  # Default if not found
+def get_viewport_clip_end():
+    for area in bpy.context.screen.areas:
+        if area.type == 'VIEW_3D':
+            for space in area.spaces:
+                if space.type == 'VIEW_3D':
+                    return space.clip_end
+    return 10000.0  # Default fallback if not found
 
 
 class OBJECT_OT_apply_color_changes_mesh(bpy.types.Operator):
@@ -294,7 +297,7 @@ class OBJECT_OT_apply_color_changes_mesh(bpy.types.Operator):
                         return
 
 
-class OBJECT_PT_custom_panel_mesh(bpy.types.Panel):
+class OBJECT_PT_custom_panel_mesh(bpy.types.Panel): # UI Panel
     bl_label = "Manage Point Data"
     bl_idname = "IMPORT_PT_panel_manage_mesh"
     bl_space_type = 'VIEW_3D'
@@ -302,15 +305,13 @@ class OBJECT_PT_custom_panel_mesh(bpy.types.Panel):
     bl_category = 'GeoModeller'
     bl_parent_id = "GEOMOD_PT_points_category"
     bl_options = {'DEFAULT_CLOSED'}
+    
 
     def draw(self, context):
         layout = self.layout
         mytool = context.scene.my_mesh_tool
 
         layout.prop_search(mytool, "collection_name", bpy.data, "collections", text="Choose Mesh Collection")
-        if mytool.collection_name:
-            mytool.update_default_size(context)  # Update size dynamically before drawing
-
         if mytool.available_properties:
             layout.prop(mytool, "selected_property", text="Attribute")
             if mytool.selected_property:
@@ -318,11 +319,12 @@ class OBJECT_PT_custom_panel_mesh(bpy.types.Panel):
                 layout.prop(mytool, "use_size_scaling", text="Adjust Size")
                 if mytool.use_size_scaling:
                     layout.prop(mytool, "size", text="Size")
-
+                    
                 layout.prop(mytool, "adjust_for_outliers", text="Colormap Normalization")
                 if mytool.adjust_for_outliers:
                     layout.prop(mytool, "scaling_factor", text="IQR Scaling Factor")
-
+                    
+                
                 if mytool.use_size_scaling:
                     layout.prop(mytool, "log_scale", text="Log Scale Sizing")
                     if mytool.log_scale:
@@ -331,7 +333,6 @@ class OBJECT_PT_custom_panel_mesh(bpy.types.Panel):
                         layout.prop(mytool, "size_multiplier", text="Size Multiplier")
                 layout.prop(mytool, "legend", text="Legend")
                 layout.operator("object.apply_color_changes_mesh", text="Render", icon='PLAY')
-
 
 class MyMeshProperties(bpy.types.PropertyGroup):
     collection_name: bpy.props.StringProperty(name="Collection Name", update=update_properties_list)
@@ -368,10 +369,9 @@ class MyMeshProperties(bpy.types.PropertyGroup):
     size: bpy.props.FloatProperty(
         name="Size",
         description="Default size for mesh objects",
-        default=1.0,  # Fallback default, will be updated dynamically
+        default=1.0,
         min=0.1,
-        max=500,
-        update=lambda self, context: self.update_default_size(context)
+        max=500
     )
     size_multiplier: bpy.props.FloatProperty(
         name="Size Multiplier",
@@ -400,10 +400,6 @@ class MyMeshProperties(bpy.types.PropertyGroup):
         description="Display legend in the scene",
         default=False
     )
-
-    def update_default_size(self, context):
-        self.size = get_first_object_size_x(self.collection_name)
-
 
 def register():
     bpy.utils.register_class(MyMeshProperties)
