@@ -52,14 +52,7 @@ class LoadCSVOperatorPoints(bpy.types.Operator, ImportHelper): # load CSV
         update_csv_columns_points(self.filepath)  # Update column selection 
         return {'FINISHED'}
 
-def create_template_sphere(name="TemplateSphere"):
-    # Access the scene's clip end value
-    scene = bpy.context.scene
-    clip_end = scene.camera.data.clip_end if scene.camera and scene.camera.type == 'CAMERA' else 20000.0  # Default fallback
-
-    # Calculate radius based on clip end
-    radius = clip_end * 0.0012
-
+def create_template_sphere(radius=1.5, name="TemplateSphere"): # template sphere plus duclication to increase effeciency
     bpy.ops.mesh.primitive_uv_sphere_add(radius=radius)
     sphere = bpy.context.object
     sphere.name = name
