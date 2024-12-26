@@ -364,7 +364,7 @@ class MyMeshProperties(bpy.types.PropertyGroup):
     use_size_scaling: bpy.props.BoolProperty(
         name="Use Size Scaling",
         description="Enable or disable size scaling",
-        default=True
+        default=False
     )
     size: bpy.props.FloatProperty(
         name="Size",
