@@ -52,7 +52,22 @@ class LoadCSVOperatorPoints(bpy.types.Operator, ImportHelper): # load CSV
         update_csv_columns_points(self.filepath)  # Update column selection 
         return {'FINISHED'}
 
-def create_template_sphere(radius=10, name="TemplateSphere"): # template sphere plus duclication to increase effeciency
+def get_viewport_clip_end(): # Retrieve the 'Clip End' value from the 3D Viewport's View settings
+    for area in bpy.context.screen.areas:
+        if area.type == 'VIEW_3D':
+            for space in area.spaces:
+                if space.type == 'VIEW_3D':
+                    return space.clip_end
+    return 10000.0  # Default fallback if not found
+
+
+def create_template_sphere(name="TemplateSphere"):
+    # Access the viewport's clip end value
+    clip_end = get_viewport_clip_end()
+    
+    # Calculate radius based on clip end
+    radius = clip_end * 0.0012
+
     bpy.ops.mesh.primitive_uv_sphere_add(radius=radius)
     sphere = bpy.context.object
     sphere.name = name
