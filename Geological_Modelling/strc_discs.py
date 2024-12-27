@@ -28,7 +28,7 @@ class StructuralDiscsProperties(bpy.types.PropertyGroup):
     available_properties: bpy.props.CollectionProperty(type=bpy.types.PropertyGroup)
     strike_property: bpy.props.EnumProperty(name="Strike Property", items=get_properties_items)
     dip_property: bpy.props.EnumProperty(name="Dip Property", items=get_properties_items)
-    size: bpy.props.FloatProperty(name="Size", description="Size of the discs", default=75.0, min=0.1, max=1000.0)
+    size: bpy.props.FloatProperty(name="Size", description="Size of the discs", default=5.0, min=0.1, max=1000.0)
     orientation_mode: bpy.props.EnumProperty(
         name="Orientation Mode",
         description="Choose the orientation mode for strike and dip",
