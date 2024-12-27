@@ -102,7 +102,7 @@ class IMPORT_OT_generate_structural_discs(bpy.types.Operator):
                 return {'CANCELLED'}
 
             # Create a template mesh for the discs
-            template_mesh = create_disc_mesh(radius=1.0, name="TemplateDiscMesh")
+            template_mesh = create_disc_mesh(radius=25.0, name="TemplateDiscMesh")
 
             # Create a new collection for the discs
             discs_collection_name = "Structural Discs Collection"
