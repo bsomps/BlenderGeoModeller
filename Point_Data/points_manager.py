@@ -126,7 +126,7 @@ class OBJECT_OT_apply_color_changes_mesh(bpy.types.Operator):
                                     max_value = max(log_scale_property_data['values'])
                                     min_value = min(log_scale_property_data['values'])
                                     min_size = 0.5 * props.size_multiplier
-                                    max_size = 5 * props.size_multiplier
+                                    max_size = 3.5 * props.size_multiplier
 
                                     if props.use_full_data_range:
                                         size_value = min_size + ((size_value - min_value) / (max_value - min_value)) * (max_size - min_size)
