@@ -2,6 +2,7 @@
 ![License: MIT](https://img.shields.io/badge/License-MIT-blue.svg)
 ![Python](https://img.shields.io/badge/language-Python-blue)
 ![Version](https://img.shields.io/badge/version-1.0.0-blue)
+![GitHub All Releases](https://img.shields.io/github/downloads/bsomps/BlenderGeoModeller/total)
 ![GitHub Repo stars](https://img.shields.io/github/stars/bsomps/BlenderGeoModeller?style=social)
 
 ---
