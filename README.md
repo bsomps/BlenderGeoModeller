@@ -1,3 +1,11 @@
+![Blender Add-on](https://img.shields.io/badge/Blender-Add--on-orange?logo=blender)
+![License: MIT](https://img.shields.io/badge/License-MIT-blue.svg)
+![Python](https://img.shields.io/badge/language-Python-blue)
+![Version](https://img.shields.io/badge/version-1.0.0-blue)
+![GitHub Repo stars](https://img.shields.io/github/stars/bsomps/BlenderGeoModeller?style=social)
+
+---
+
 # **Reliance on BlenderGIS**
 
 Please ensure you have BlenderGIS installed (awesome free add-on), as you will need this to set up a georeferenced scene in blender. Addtionally, you'll want it for other features including; 
