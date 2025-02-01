@@ -63,7 +63,12 @@ def slicer_toggle(self, context):
         context.scene.slicer_settings.slicing_object = slicer_cube
         update_boolean_modifiers(slicer_cube)
     elif self.use_custom_object:
-        update_boolean_modifiers(context.scene.slicer_settings.slicing_object)
+        slicing_object = context.scene.slicer_settings.slicing_object
+        if slicing_object:
+            print(f"Using custom slicing object: {slicing_object.name}")
+            update_boolean_modifiers(slicing_object)
+        else:
+            print("No custom slicing object selected")
     else:
         remove_slicer()
 
@@ -85,7 +90,7 @@ def update_boolean_modifiers(slicing_object):
             boolean_modifier.use_self = True
             boolean_modifier.use_hole_tolerant = True
 
-        
+        print(f"Updated boolean modifier for {obj.name} with slicing object {slicing_object.name}")
 
 def remove_slicer():
     slicer_cube = bpy.data.objects.get("SlicerCube")
