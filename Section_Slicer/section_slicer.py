@@ -24,7 +24,8 @@ class SlicerSettings(bpy.types.PropertyGroup):
     slicing_object: bpy.props.PointerProperty(
         name="Slicing Object",
         type=bpy.types.Object,
-        poll=lambda self, obj: obj.type == 'MESH'
+        poll=lambda self, obj: obj.type == 'MESH',
+        update=lambda self, context: update_slicing_object(self, context)  # Add update callback
     )
 
 def create_slicer_cube():
@@ -50,6 +51,12 @@ def get_visible_mesh_objects():
         if obj.type == 'MESH' and obj.visible_get():
             visible_mesh_objects.append(obj)
     return visible_mesh_objects
+
+def update_slicing_object(self, context):
+    """Update boolean modifiers when the slicing object is changed."""
+    if self.use_custom_object and self.slicing_object:
+        print(f"Slicing object updated to: {self.slicing_object.name}")
+        update_boolean_modifiers(self.slicing_object)
 
 def slicer_toggle(self, context):
     if self.apply_default_slicer and self.use_custom_object:
