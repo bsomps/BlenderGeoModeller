@@ -18,7 +18,7 @@ class SlicerSettings(bpy.types.PropertyGroup):
             ('FAST', "Fast", "Fast boolean operation"),
             ('EXACT', "Exact", "Exact boolean operation"),
         ],
-        default='EXACT',
+        default='FAST',
         update=lambda self, context: update_boolean_type(self.boolean_type)
     )
     slicing_object: bpy.props.PointerProperty(
