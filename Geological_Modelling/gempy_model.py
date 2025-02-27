@@ -18,16 +18,14 @@ from bpy.props import CollectionProperty, BoolProperty, EnumProperty
 
 # This code attempts to emulate the workflow of the gempy module through the UI panel. 
 # Note that several parameters that are availble through the gempy module are left out
-# the code does not attempt to create the lith blocks, they can be brought in as point clouds,
-# but I have not figured out a clean way to display these blocks as a mesh in blender
 
 # 1. Create model extents by drawing a cube around the area you want to model (this sets xmin, xmax, ymin, ymax, zmin, zmax). Name you model and set the refinment (6 is recommended)
-# 2. Choose your 'formations' and 'orientations' data you want to complile into a CSV. CSVs are created from objects within collections. This can be points (mesh) of drill hole intervals (curves) 
+# 2. Choose your 'formations' and 'orientations' data you want to complile into a CSV. CSVs are created from objects within collections. So essentially createing a input CSV using object within a collection. This can be points (mesh) of drill hole intervals (curves) 
 #    formation names will populate based on its name in the outliner, and polarity, azimuth, and dip will be populated from the custom properties
 # 2. Strat series and fault series can then be added and organized based on user input. The 'order' dictates the geologic age, 0 is youngest.
 #    Each series relation type can be set to "ERODE", "ONLAP" or "BASEMENT" and the faults series are automatically set to "FAULT". The fault relations matrix is created dynamically based on 'order' inputs
-# 3. The result is a collection of all the surfaces (mesh objects) generated through the gempy engine. Once in blender
-#    these mesh objects can be cleaned up, edited, used to create lith blocks ect...
+# 3. The result is a collection of all the surfaces (mesh objects) and the option to generate the lith_blocks generated through the gempy engine. Once in blender
+#    these mesh objects can be cleaned up, edited, clipped ect.. 
 #  Check you console window to view the structral frame after generating the model
 
 
@@ -332,6 +330,12 @@ class GeoModellerProperties(bpy.types.PropertyGroup):
         ],
         default='DIP_DIRECTION'
     )
+    create_lith_blocks: bpy.props.BoolProperty(
+        name="Create and Add Lith Blocks",
+        description="If checked, the script will generate lithology blocks",
+        default=False
+    )
+
 
 
 class OBJECT_PT_GeoModeller(bpy.types.Panel):
@@ -388,7 +392,8 @@ class OBJECT_PT_GeoModeller(bpy.types.Panel):
                 row.prop(item, "selected", text=item.name)
             remove_op = box.operator("geo.remove_fault_series", text="Remove This Fault Series", icon='X')
             remove_op.index = idx
-
+            
+        layout.prop(geo_modeller_props, "create_lith_blocks", text="Create and Add Lith Blocks")
         layout.operator("object.compute_gempy_model", text="Compute Model", icon='PLAY')
 
 
@@ -522,29 +527,27 @@ class ComputeGemPyModelOperator(bpy.types.Operator):
         self.report({'INFO'}, "GemPy Model Computed and ready for visualization")
         return {'FINISHED'}
 
-def compute_and_visualize_model(data): # This part is post-gempy module. this creates the mesh from the raw-arrays
-    # Compute the geological model
+def compute_and_visualize_model(data):
+    # Compute the model
     gp.compute_model(data)
-    
-    # Access the vertices and edges directly from the solutions object
-    all_vertices = data.solutions.raw_arrays.vertices
-    all_edges = data.solutions.raw_arrays.edges
-
-    # Ensure Blender's context is appropriate
     scene = bpy.context.scene
 
-    # Get project name and create a unique collection for the project
+    # Get project name and create collection for the project
     project_name = scene.geo_modeller.project_name
     base_collection_name = project_name
     collection_name = base_collection_name
     count = 1
-    
+
     while collection_name in bpy.data.collections:
         collection_name = f"{base_collection_name}_{count}"
         count += 1
-    
+
     project_collection = bpy.data.collections.new(collection_name)
     scene.collection.children.link(project_collection)
+
+    # Access the vertices and edges directly from gempy
+    all_vertices = data.solutions.raw_arrays.vertices
+    all_edges = data.solutions.raw_arrays.edges
 
     # Collect series names and colors from all structural group elements
     series_elements = []
@@ -553,7 +556,7 @@ def compute_and_visualize_model(data): # This part is post-gempy module. this cr
             series_elements.append((element.name, element.color))
 
     for i, (vertices, (name, color)) in enumerate(zip(all_vertices, series_elements)):
-        # Apply the inverse transformation to each set of vertices
+        # Apply INVERSE TRANSFORMATION to each set of vertices
         transformed_vertices = data.transform.apply_inverse(vertices)
 
         # Create a new mesh and object for each set of transformed vertices
@@ -565,7 +568,7 @@ def compute_and_visualize_model(data): # This part is post-gempy module. this cr
         bpy.context.view_layer.objects.active = obj
         obj.select_set(True)
 
-        # Use BMesh to construct the mesh
+        # construct the mesh
         bm = bmesh.new()
         for vert in transformed_vertices:
             bm.verts.new((vert[0], vert[1], vert[2]))
@@ -592,8 +595,88 @@ def compute_and_visualize_model(data): # This part is post-gempy module. this cr
             bsdf.inputs['Base Color'].default_value = (*[int(color[i:i+2], 16)/255 for i in (1, 3, 5)], 1)
 
         obj.data.materials.append(material)
+        
+    
+    if scene.geo_modeller.create_lith_blocks: # IF LITH BLOCKS IS CHECKED
+        print("Creating lith blocks...")
 
-    print("Model computation and visualization complete.")
+        # Access lithology data and model dimensions from gempy
+        lith_block = data.solutions.raw_arrays.lith_block.reshape(data.grid.regular_grid.resolution)
+        nx, ny, nz = data.grid.regular_grid.resolution
+        xmin, xmax, ymin, ymax, zmin, zmax = data.grid.regular_grid.extent
+
+        dx = (xmax - xmin) / nx
+        dy = (ymax - ymin) / ny
+        dz = (zmax - zmin) / nz
+
+        lith_types = {}
+        idx = 1  
+
+        for group in data.structural_frame.structural_groups:
+            for element in group.elements:  # Extract each geological unit
+                lith_types[idx] = (element.name, element.color)
+                idx += 1  
+
+
+        for lith_id, (lith_name, color) in lith_types.items():
+            bm = bmesh.new()  
+
+            for i in range(nx):
+                for j in range(ny):
+                    for k in range(nz):
+                        if lith_block[i, j, k] == lith_id:
+                            # Compute the voxel center position
+                            x = xmin + dx * (i + 0.5)
+                            y = ymin + dy * (j + 0.5)
+                            z = zmin + dz * (k + 0.5)
+
+                            # Create voxel cube
+                            verts = [
+                                bm.verts.new((x - dx/2, y - dy/2, z - dz/2)),
+                                bm.verts.new((x + dx/2, y - dy/2, z - dz/2)),
+                                bm.verts.new((x + dx/2, y + dy/2, z - dz/2)),
+                                bm.verts.new((x - dx/2, y + dy/2, z - dz/2)),
+                                bm.verts.new((x - dx/2, y - dy/2, z + dz/2)),
+                                bm.verts.new((x + dx/2, y - dy/2, z + dz/2)),
+                                bm.verts.new((x + dx/2, y + dy/2, z + dz/2)),
+                                bm.verts.new((x - dx/2, y + dy/2, z + dz/2))
+                            ]
+                            bm.faces.new([verts[i] for i in (0, 1, 2, 3)])  # Bottom
+                            bm.faces.new([verts[i] for i in (4, 5, 6, 7)])  # Top
+                            bm.faces.new([verts[i] for i in (0, 1, 5, 4)])  # Front
+                            bm.faces.new([verts[i] for i in (2, 3, 7, 6)])  # Back
+                            bm.faces.new([verts[i] for i in (1, 2, 6, 5)])  # Right
+                            bm.faces.new([verts[i] for i in (3, 0, 4, 7)])  # Left
+
+            # Convert BMesh to mesh and create a Blender object
+            mesh = bpy.data.meshes.new(f'Lith_{lith_name}')
+            bm.to_mesh(mesh)
+            bm.free()
+
+            obj = bpy.data.objects.new(f'Lith_{lith_name}', mesh)
+            project_collection.objects.link(obj)
+            
+        
+            bpy.context.view_layer.objects.active = obj
+            obj.select_set(True)
+
+            # apply Merge by Distance
+            bpy.ops.object.mode_set(mode='EDIT')
+            bpy.ops.mesh.select_all(action='SELECT')  
+            bpy.ops.mesh.remove_doubles(threshold=0.001)  
+            bpy.ops.object.mode_set(mode='OBJECT')
+            
+            # Apply lith_block with color from gempy
+            material = bpy.data.materials.new(name=f"Material_{lith_name}")
+            material.use_nodes = True
+            bsdf = material.node_tree.nodes.get("Principled BSDF")
+
+            if bsdf:
+                bsdf.inputs['Base Color'].default_value = (*[int(color[i:i+2], 16)/255 for i in (1, 3, 5)], 1)
+
+            obj.data.materials.append(material)
+
+    print("Model computation and visualization complete")
 
 
        
@@ -629,4 +712,3 @@ def unregister():
 
 if __name__ == "__main__":
     register()
-
