@@ -128,7 +128,7 @@ Dependencies must be installed in your Blender environment before installing the
 ### **Geological Modelling**
 - **GemPy Modeller**:
    - Emulates the workflow of the gemPy module (v3). (set extents, feed formation and orientation data, create structral frame).
-   - Returns the interpolated surfaces only.
+   - Returns the interpolated surfaces with the option to generate the lith blocks. Note that lith blocks are high-poly objects and modifier operators will slow way down.
    - Complex models will have long processing times.
    - For an overview of GemPy visit [GemPy](https://www.gempy.org/)
  
