@@ -2,7 +2,6 @@
 ![License: MIT](https://img.shields.io/badge/License-MIT-blue.svg)
 ![Python](https://img.shields.io/badge/language-Python-blue)
 ![Version](https://img.shields.io/badge/version-1.0.0-blue)
-![GitHub All Releases](https://img.shields.io/github/downloads/bsomps/BlenderGeoModeller/total)
 ![GitHub Repo stars](https://img.shields.io/github/stars/bsomps/BlenderGeoModeller?style=social)
 
 ---
@@ -182,5 +181,11 @@ This allows the user to see which direction the viewport is oriented (recored in
     - 8 GB VRAM minimum (for larger scenes, more VRAM may be required)
 - **Storage:** NVMe SSD for optimal read/write speeds
 - **Screen Resolution:** 2560×1440 pixels (or higher if using 4K/large displays)
+
+# **Contributions**
+
+I welcome issues and contributions! If you find a bug, have a feature request, or want to improve the project, feel free to open an issue or submit a pull request.
+
+To contribute, fork the repository, create a branch, make your changes, and open a pull request with a brief description. Discussions and feedback are always appreciated. Thanks for contributing!
 
 
