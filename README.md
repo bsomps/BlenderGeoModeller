@@ -1,7 +1,7 @@
 ![Blender Add-on](https://img.shields.io/badge/Blender-Add--on-orange?logo=blender)
 ![License: MIT](https://img.shields.io/badge/License-MIT-blue.svg)
 ![Python](https://img.shields.io/badge/language-Python-blue)
-![Version](https://img.shields.io/badge/version-1.0.0-blue)
+![Version](https://img.shields.io/badge/version-1.0.1-blue)
 ![GitHub Repo stars](https://img.shields.io/github/stars/bsomps/BlenderGeoModeller?style=social)
 
 ---
