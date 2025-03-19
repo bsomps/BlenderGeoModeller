@@ -81,6 +81,7 @@ Dependencies must be installed in your Blender environment before installing the
 
 ![Alt text](https://github.com/bsomps/BlenderGeoModeller/blob/media/Gempy-example_gif.gif)
 
+![Alt text](https://github.com/bsomps/BlenderGeoModeller/blob/media/Lith_block_example.gif)
 
 
 # **Overview Of Operators**
