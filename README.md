@@ -17,7 +17,7 @@ Link to BlenderGIS download: [BlenderGIS](https://github.com/domlysz/BlenderGIS)
 
 # **BlenderGeoModeller Installation Instructions**
 
-**Works with Blender V3.8 and up**
+**Works with Blender V3.8 to version 4.3 as of now**
 
 [Video Instructions](https://github.com/bsomps/BlenderGeoModeller/blob/media/Installation_instructions_blender_v4.3.0.mp4)
 
